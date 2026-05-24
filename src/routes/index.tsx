@@ -13,7 +13,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Dashboard — PLTMH Banjar River Monitoring" },
-      { name: "description", content: "Real-time IoT dashboard monitoring water level, flow velocity, and discharge for the PLTMH Banjar micro-hydro power plant." },
+      { name: "description", content: "Dashboard IoT real-time untuk memantau ketinggian air, kecepatan aliran, dan debit untuk pembangkit listrik mikrohidro PLTMH Banjar." },
     ],
   }),
   component: Dashboard,
@@ -55,14 +55,14 @@ function Dashboard() {
         <AlertBanner level={level} />
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <KpiCard label="Water Level" value={latest.level.toFixed(2)} unit="m" icon={Droplets} variant={level === "danger" ? "danger" : level === "standby" ? "warning" : "primary"} trend={trendLevel} max={8} />
-          <KpiCard label="Flow Velocity" value={latest.velocity.toFixed(2)} unit="m/s" icon={Wind} variant="success" trend={trendVel} max={3} />
-          <KpiCard label="Discharge (Debit)" value={latest.discharge.toFixed(2)} unit="m³/s" icon={Activity} variant="primary" trend={trendDis} />
+          <KpiCard label="Level Air" value={latest.level.toFixed(2)} unit="m" icon={Droplets} variant={level === "danger" ? "danger" : level === "standby" ? "warning" : "primary"} trend={trendLevel} max={8} />
+          <KpiCard label="Kecepatan Aliran" value={latest.velocity.toFixed(2)} unit="m/d" icon={Wind} variant="success" trend={trendVel} max={3} />
+          <KpiCard label="Debit" value={latest.discharge.toFixed(2)} unit="m³/d" icon={Activity} variant="primary" trend={trendDis} />
         </div>
 
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
           <div className="lg:col-span-2">
-            <MonitoringChart data={data} description="Last 12 hours · 15-minute resolution · Auto-refresh 4s" />
+            <MonitoringChart data={data} description="12 jam terakhir · resolusi 15 menit · Auto-refresh 4 detik" />
           </div>
           <div className="space-y-4">
             <DeviceStatusCard />

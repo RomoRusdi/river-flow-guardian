@@ -10,7 +10,7 @@ export const Route = createFileRoute("/analytics")({
   head: () => ({
     meta: [
       { title: "AI Analytics — PLTMH Banjar" },
-      { name: "description", content: "Random Forest based predictions for river water level and flow velocity over the next 6-12 hours." },
+      { name: "description", content: "Prediksi berbasis LSTM untuk ketinggian air sungai dan kecepatan aliran selama 6-12 jam ke depan." },
     ],
   }),
   component: AnalyticsPage,
@@ -21,7 +21,7 @@ function AnalyticsPage() {
   const predictions = generatePrediction(history[history.length - 1], 12);
 
   return (
-    <AppLayout title="AI Analytics" subtitle="Random Forest predictions · 6-12h forecast horizon">
+    <AppLayout title="AI Analytics" subtitle="LSTM predictions · 6-12h forecast horizon">
       <div className="space-y-5">
         <Card className="border-border/60 bg-gradient-water p-5 shadow-elevated">
           <div className="flex flex-wrap items-start justify-between gap-4">
@@ -31,11 +31,11 @@ function AnalyticsPage() {
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h2 className="text-lg font-semibold">Random Forest Predictor</h2>
+                  <h2 className="text-lg font-semibold">LSTM</h2>
                   <Badge variant="outline" className="border-success/40 bg-success/10 text-success">Active</Badge>
                 </div>
                 <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
-                  Trained on 18 months of historical sensor + rainfall data. Predicts water level and flow velocity with 30-min granularity for the next 12 hours.
+                  Dilatih menggunakan data sensor dan curah hujan historis selama 18 bulan. Memprediksi ketinggian air dan kecepatan aliran dengan granularitas 30 menit untuk 12 jam berikutnya.
                 </p>
               </div>
             </div>
@@ -78,19 +78,19 @@ function AnalyticsPage() {
             <ul className="mt-3 space-y-2.5 text-sm text-muted-foreground">
               <li className="flex gap-2">
                 <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-                Predicted peak water level of <span className="font-medium text-foreground">5.8 m</span> in approximately <span className="font-medium text-foreground">4 hours</span> — within Standby threshold.
+                Ketinggian air puncak yang diprediksi <span className="font-medium text-foreground">5.8 m</span> dalam waktu sekitar <span className="font-medium text-foreground">4 jam</span> — berada dalam ambang batas Standby.
               </li>
               <li className="flex gap-2">
                 <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-warning" />
-                Probability of breaching Danger threshold (≥6 m) in next 12h: <span className="font-medium text-warning">22%</span>.
+                Kemungkinan melampaui ambang batas Bahaya (≥6 m) dalam 12 jam ke depan: <span className="font-medium text-warning">22%</span>.
               </li>
               <li className="flex gap-2">
                 <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-success" />
-                Recommended turbine operation: <span className="font-medium text-foreground">Maintain 85% capacity</span> for next 6 hours.
+                Rekomendasi operasi turbin: <span className="font-medium text-foreground">Pertahankan kapasitas 85%</span> untuk 6 jam ke depan.
               </li>
               <li className="flex gap-2">
                 <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-                Last model retrain: <span className="font-medium text-foreground">3 days ago</span> · Next scheduled: 4 days.
+                Pelatihan model terakhir: <span className="font-medium text-foreground">3 hari yang lalu</span> · Jadwal berikutnya: 4 hari.
               </li>
             </ul>
           </Card>
