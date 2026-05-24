@@ -6,7 +6,7 @@ const config = {
   safe: {
     icon: ShieldCheck,
     title: "Status: AMAN (Safe)",
-    desc: "Water level and flow are within normal operating range. All systems nominal.",
+    desc: "Tingkat dan aliran air berada dalam kisaran operasi normal. Semua sistem dalam kondisi normal.",
     bg: "bg-gradient-success border-success/30",
     iconBg: "bg-success/20 text-success animate-pulse-ring",
     label: "SAFE",
@@ -15,7 +15,7 @@ const config = {
   standby: {
     icon: AlertTriangle,
     title: "Status: SIAGA (Standby)",
-    desc: "Elevated water level detected. Monitor closely and prepare contingency procedures.",
+    desc: "Tingkat air yang meningkat terdeteksi. Pantau secara ketat dan siapkan prosedur darurat.",
     bg: "bg-gradient-warning border-warning/40",
     iconBg: "bg-warning/20 text-warning animate-pulse-ring-warn",
     label: "STANDBY",
@@ -24,7 +24,7 @@ const config = {
   danger: {
     icon: Siren,
     title: "Status: AWAS (Danger)",
-    desc: "Critical threshold exceeded! Initiate emergency protocols immediately.",
+    desc: "Batas kritis terlampaui! Mulai protokol darurat segera.",
     bg: "bg-gradient-danger border-danger/50",
     iconBg: "bg-danger/20 text-danger animate-pulse-ring-danger",
     label: "DANGER",

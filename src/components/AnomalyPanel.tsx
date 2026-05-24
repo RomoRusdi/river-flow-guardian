@@ -18,7 +18,7 @@ export function AnomalyPanel({ anomalies }: { anomalies: Anomaly[] }) {
         </div>
         <div>
           <h3 className="text-base font-semibold">AI Anomaly Detection</h3>
-          <p className="text-xs text-muted-foreground">Recent events flagged by ML model</p>
+          <p className="text-xs text-muted-foreground">Peristiwa terbaru yang ditandai oleh model ML</p>
         </div>
       </div>
       <div className="space-y-2">

@@ -14,7 +14,7 @@ export const Route = createFileRoute("/history")({
   head: () => ({
     meta: [
       { title: "Historical Data — PLTMH Banjar" },
-      { name: "description", content: "Search, filter and export historical sensor readings from the river monitoring system." },
+      { name: "description", content: "Cari, filter, dan ekspor data pembacaan sensor historis dari sistem pemantauan sungai." },
     ],
   }),
   component: HistoryPage,
@@ -51,7 +51,7 @@ function HistoryPage() {
         <div className="flex flex-wrap items-center gap-3 border-b border-border/60 p-4">
           <div className="relative flex-1 min-w-[200px]">
             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input placeholder="Search by time (e.g. 14:30)" value={search} onChange={(e) => setSearch(e.target.value)} className="pl-8" />
+            <Input placeholder="Cari berdasarkan waktu (misalnya 14:30)" value={search} onChange={(e) => setSearch(e.target.value)} className="pl-8" />
           </div>
           <Select value={filter} onValueChange={setFilter}>
             <SelectTrigger className="w-[160px]"><SelectValue /></SelectTrigger>
@@ -70,10 +70,10 @@ function HistoryPage() {
           <Table>
             <TableHeader className="sticky top-0 bg-card">
               <TableRow>
-                <TableHead>Time</TableHead>
-                <TableHead className="text-right">Water Level</TableHead>
-                <TableHead className="text-right">Velocity</TableHead>
-                <TableHead className="text-right">Discharge</TableHead>
+                <TableHead>Waktu</TableHead>
+                <TableHead className="text-right">Level Air</TableHead>
+                <TableHead className="text-right">Kecepatan Arus</TableHead>
+                <TableHead className="text-right">Debit</TableHead>
                 <TableHead>Status</TableHead>
               </TableRow>
             </TableHeader>
@@ -82,8 +82,8 @@ function HistoryPage() {
                 <TableRow key={`${d.timestamp}-${i}`}>
                   <TableCell className="font-mono text-xs">{d.time}</TableCell>
                   <TableCell className="text-right tabular-nums">{d.level.toFixed(2)} m</TableCell>
-                  <TableCell className="text-right tabular-nums">{d.velocity.toFixed(2)} m/s</TableCell>
-                  <TableCell className="text-right tabular-nums">{d.discharge.toFixed(2)} m³/s</TableCell>
+                  <TableCell className="text-right tabular-nums">{d.velocity.toFixed(2)} m/d</TableCell>
+                  <TableCell className="text-right tabular-nums">{d.discharge.toFixed(2)} m³/d</TableCell>
                   <TableCell>
                     <StatusBadge status={d.status} />
                   </TableCell>

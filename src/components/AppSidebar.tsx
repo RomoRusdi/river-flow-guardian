@@ -15,10 +15,10 @@ import {
 
 const items = [
   { title: "Dashboard", url: "/", icon: LayoutDashboard },
-  { title: "Analytics", url: "/analytics", icon: LineChart },
-  { title: "History", url: "/history", icon: History },
-  { title: "User Management", url: "/users", icon: Users },
-  { title: "Settings", url: "/settings", icon: Settings },
+  { title: "Analisis", url: "/analytics", icon: LineChart },
+  { title: "Riwayat", url: "/history", icon: History },
+  { title: "Manajemen Pengguna", url: "/users", icon: Users },
+  { title: "Pengaturan", url: "/settings", icon: Settings },
 ] as const;
 
 export function AppSidebar() {
@@ -34,14 +34,14 @@ export function AppSidebar() {
           </div>
           <div className="flex flex-col group-data-[collapsible=icon]:hidden">
             <span className="text-sm font-semibold leading-tight">PLTMH Banjar</span>
-            <span className="text-xs text-muted-foreground leading-tight">River Monitoring</span>
+            <span className="text-xs text-muted-foreground leading-tight">Monitoring Sungai</span>
           </div>
         </div>
       </SidebarHeader>
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Operations</SidebarGroupLabel>
+          <SidebarGroupLabel>Operasional</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => {
@@ -65,7 +65,7 @@ export function AppSidebar() {
       <SidebarFooter className="border-t border-sidebar-border">
         <div className="flex items-center gap-2 px-2 py-2 text-xs text-muted-foreground group-data-[collapsible=icon]:hidden">
           <div className="h-2 w-2 rounded-full bg-success animate-pulse-ring" />
-          System Online · v1.0.0
+          Sistem Berjalan · v1.0.0
         </div>
       </SidebarFooter>
     </Sidebar>

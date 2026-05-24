@@ -16,7 +16,7 @@ export const Route = createFileRoute("/users")({
   head: () => ({
     meta: [
       { title: "User Management — PLTMH Banjar" },
-      { name: "description", content: "Admin-only user management for the PLTMH Banjar monitoring platform." },
+      { name: "description", content: "Admin-only user management untuk platform pemantauan PLTMH Banjar." },
     ],
   }),
   component: UsersPage,
@@ -42,11 +42,11 @@ function UsersPage() {
           <div className="flex items-center gap-2">
             <Shield className="h-4 w-4 text-primary" />
             <span className="text-sm font-medium">{users.length} users</span>
-            <Badge variant="outline" className="border-primary/40 bg-primary/10 text-primary">Admin Access</Badge>
+            <Badge variant="outline" className="border-primary/40 bg-primary/10 text-primary">Akses Admin</Badge>
           </div>
           <Dialog open={open} onOpenChange={(o) => { setOpen(o); if (!o) setEditing(null); }}>
             <DialogTrigger asChild>
-              <Button onClick={() => setEditing(null)}><Plus className="mr-2 h-4 w-4" /> New User</Button>
+              <Button onClick={() => setEditing(null)}><Plus className="mr-2 h-4 w-4" /> Tambah User</Button>
             </DialogTrigger>
             <UserDialog user={editing} onSave={save} />
           </Dialog>
@@ -56,12 +56,12 @@ function UsersPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Name</TableHead>
+                <TableHead>Nama</TableHead>
                 <TableHead>Email</TableHead>
                 <TableHead>Role</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Last login</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead>Terakhir Login</TableHead>
+                <TableHead className="text-right">Aksi</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

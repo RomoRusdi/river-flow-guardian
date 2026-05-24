@@ -23,41 +23,41 @@ function SettingsPage() {
     <AppLayout title="Settings" subtitle="Thresholds · Integrations · Notifications">
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
         <Card className="border-border/60 p-5 shadow-elevated">
-          <h3 className="text-base font-semibold">Alert Thresholds</h3>
-          <p className="text-xs text-muted-foreground">Define water level boundaries for the EWS system.</p>
+          <h3 className="text-base font-semibold">Threshold Peringatan</h3>
+          <p className="text-xs text-muted-foreground">Tetapkan batas ketinggian air untuk sistem EWS.</p>
           <div className="mt-4 space-y-3">
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <Label>Standby threshold (m)</Label>
+                <Label>Threshold Standby (m)</Label>
                 <Input type="number" step="0.1" defaultValue={4.5} />
               </div>
               <div>
-                <Label>Danger threshold (m)</Label>
+                <Label>Threshold Bahaya (m)</Label>
                 <Input type="number" step="0.1" defaultValue={6.0} />
               </div>
             </div>
             <div>
-              <Label>River cross-section width (m)</Label>
+              <Label>Lebar penampang melintang sungai (m)</Label>
               <Input type="number" step="0.1" defaultValue={4.2} />
             </div>
-            <Button className="w-full">Save thresholds</Button>
+            <Button className="w-full">Simpan threshold</Button>
           </div>
         </Card>
 
         <Card className="border-border/60 p-5 shadow-elevated">
-          <h3 className="text-base font-semibold">Notifications</h3>
-          <p className="text-xs text-muted-foreground">Where to send alerts when EWS triggers.</p>
+          <h3 className="text-base font-semibold">Notifikasi</h3>
+          <p className="text-xs text-muted-foreground">Tempat mengirimkan peringatan ketika EWS diaktifkan.</p>
           <div className="mt-4 space-y-4">
-            <Toggle label="Email alerts" desc="Send to all admins on Standby+" defaultChecked />
-            <Toggle label="WhatsApp / SMS" desc="Critical (Danger) alerts only" defaultChecked />
-            <Toggle label="Push notifications" desc="Browser & mobile clients" />
-            <Toggle label="Telegram bot" desc="Send to operations channel" defaultChecked />
+            <Toggle label="Email alerts" desc="Kirim ke semua admin pada Standby+" defaultChecked />
+            <Toggle label="WhatsApp / SMS" desc="Peringatan kritis (Bahaya) saja" defaultChecked />
+            <Toggle label="Push notifications" desc="Browser & client mobile" />
+            <Toggle label="Telegram bot" desc="Kirim ke channel operasional" defaultChecked />
           </div>
         </Card>
 
         <Card className="border-border/60 p-5 shadow-elevated lg:col-span-2">
           <h3 className="text-base font-semibold">Backend Integrations</h3>
-          <p className="text-xs text-muted-foreground">Connect time-series storage and the live device telemetry stream.</p>
+          <p className="text-xs text-muted-foreground">Hubungkan penyimpanan data time-series dan aliran telemetri perangkat secara langsung.</p>
           <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-3">
             <IntegrationCard icon={Database} title="Supabase" desc="PostgreSQL time-series" status="Ready" />
             <IntegrationCard icon={Radio} title="MQTT Broker" desc="WebSocket bridge" status="Ready" />

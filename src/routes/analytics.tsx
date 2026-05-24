@@ -47,18 +47,18 @@ function AnalyticsPage() {
           </div>
         </Card>
 
-        <MonitoringChart data={history} predictions={predictions} title="Forecast: Next 12 hours" description="Solid = observed · Dashed = predicted" />
+        <MonitoringChart data={history} predictions={predictions} title="Prakiraan cuaca: 12 jam ke depan" description="Solid = observed · Dashed = predicted" />
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           <Card className="border-border/60 p-5 shadow-elevated">
-            <h4 className="text-sm font-semibold">Top Contributing Features</h4>
+            <h4 className="text-sm font-semibold">Fitur-Fitur yang Berkontribusi Utama</h4>
             <div className="mt-3 space-y-3">
               {[
-                { name: "Upstream rainfall (6h)", weight: 0.34 },
-                { name: "Current water level", weight: 0.27 },
-                { name: "Hour of day", weight: 0.16 },
-                { name: "Soil saturation", weight: 0.13 },
-                { name: "Wind direction", weight: 0.1 },
+                { name: "Curah hujan hulu (6 jam)", weight: 0.34 },
+                { name: "Tinggi air saat ini", weight: 0.27 },
+                { name: "Jam dalam sehari", weight: 0.16 },
+                { name: "Kekuatan tanah", weight: 0.13 },
+                { name: "Arah angin", weight: 0.1 },
               ].map((f) => (
                 <div key={f.name}>
                   <div className="flex justify-between text-xs">

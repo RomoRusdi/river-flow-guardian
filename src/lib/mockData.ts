@@ -72,10 +72,10 @@ export function generatePrediction(last: Reading, hours = 12): Reading[] {
 }
 
 export const mockAnomalies: Anomaly[] = [
-  { id: "a1", time: "10 min ago", severity: "standby", message: "Rapid water level rise detected (+0.4m / 15min)" },
-  { id: "a2", time: "42 min ago", severity: "safe", message: "Sensor calibration completed successfully" },
-  { id: "a3", time: "1h 15min ago", severity: "standby", message: "Flow velocity exceeds seasonal average" },
-  { id: "a4", time: "3h ago", severity: "danger", message: "Upstream rainfall pattern matches flood precursor" },
+  { id: "a1", time: "10 min ago", severity: "standby", message: "Peningkatan level air yang cepat terdeteksi (+0.4m / 15min)" },
+  { id: "a2", time: "42 min ago", severity: "safe", message: "Kalibrasi sensor berhasil diselesaikan" },
+  { id: "a3", time: "1h 15min ago", severity: "standby", message: "Kecepatan aliran melebihi rata-rata musiman" },
+  { id: "a4", time: "3h ago", severity: "danger", message: "Pola curah hujan hulu sesuai dengan awal banjir" },
 ];
 
 export interface User {

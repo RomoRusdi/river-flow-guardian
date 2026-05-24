@@ -47,28 +47,28 @@
 :root {
   --radius: 0.625rem;
 
-  /* Dark industrial theme - deep navy with electric blue accents */
-  --background: oklch(0.18 0.025 250);
-  --foreground: oklch(0.97 0.005 250);
+  /* LIGHT THEME (Mode Terang) */
+  --background: oklch(0.98 0.01 250);
+  --foreground: oklch(0.18 0.025 250);
 
-  --card: oklch(0.22 0.028 252);
-  --card-foreground: oklch(0.97 0.005 250);
+  --card: oklch(1 0 250);
+  --card-foreground: oklch(0.18 0.025 250);
 
-  --popover: oklch(0.22 0.028 252);
-  --popover-foreground: oklch(0.97 0.005 250);
+  --popover: oklch(1 0 250);
+  --popover-foreground: oklch(0.18 0.025 250);
 
   /* Electric blue primary */
   --primary: oklch(0.68 0.18 235);
-  --primary-foreground: oklch(0.15 0.02 250);
+  --primary-foreground: oklch(0.98 0.01 250);
 
-  --secondary: oklch(0.28 0.03 252);
-  --secondary-foreground: oklch(0.97 0.005 250);
+  --secondary: oklch(0.92 0.02 250);
+  --secondary-foreground: oklch(0.28 0.03 252);
 
-  --muted: oklch(0.26 0.025 252);
-  --muted-foreground: oklch(0.68 0.02 250);
+  --muted: oklch(0.95 0.02 250);
+  --muted-foreground: oklch(0.5 0.02 250);
 
-  --accent: oklch(0.32 0.05 232);
-  --accent-foreground: oklch(0.97 0.005 250);
+  --accent: oklch(0.92 0.02 250);
+  --accent-foreground: oklch(0.18 0.025 250);
 
   --destructive: oklch(0.62 0.22 25);
   --destructive-foreground: oklch(0.98 0 0);
@@ -81,8 +81,8 @@
   --danger: oklch(0.62 0.22 25);
   --danger-foreground: oklch(0.98 0 0);
 
-  --border: oklch(0.3 0.025 252);
-  --input: oklch(0.28 0.025 252);
+  --border: oklch(0.88 0.02 250);
+  --input: oklch(0.88 0.02 250);
   --ring: oklch(0.68 0.18 235);
 
   --chart-1: oklch(0.68 0.18 235);
@@ -91,13 +91,13 @@
   --chart-4: oklch(0.65 0.2 300);
   --chart-5: oklch(0.62 0.22 25);
 
-  --sidebar: oklch(0.15 0.025 252);
-  --sidebar-foreground: oklch(0.92 0.01 250);
+  --sidebar: oklch(0.98 0.01 250);
+  --sidebar-foreground: oklch(0.18 0.025 250);
   --sidebar-primary: oklch(0.68 0.18 235);
-  --sidebar-primary-foreground: oklch(0.15 0.02 250);
-  --sidebar-accent: oklch(0.24 0.03 252);
-  --sidebar-accent-foreground: oklch(0.97 0.005 250);
-  --sidebar-border: oklch(0.26 0.025 252);
+  --sidebar-primary-foreground: oklch(0.98 0.01 250);
+  --sidebar-accent: oklch(0.92 0.02 250);
+  --sidebar-accent-foreground: oklch(0.18 0.025 250);
+  --sidebar-border: oklch(0.88 0.02 250);
   --sidebar-ring: oklch(0.68 0.18 235);
 
   /* Gradients & shadows */
@@ -107,13 +107,46 @@
   --gradient-warning: linear-gradient(135deg, oklch(0.78 0.16 85 / 0.15), oklch(0.7 0.18 70 / 0.05));
   --gradient-danger: linear-gradient(135deg, oklch(0.62 0.22 25 / 0.18), oklch(0.55 0.24 15 / 0.05));
 
-  --shadow-elevated: 0 10px 30px -10px oklch(0 0 0 / 0.5), 0 0 0 1px oklch(1 0 0 / 0.05);
-  --shadow-glow: 0 0 30px oklch(0.68 0.18 235 / 0.3);
+  --shadow-elevated: 0 10px 30px -10px oklch(0 0 0 / 0.1), 0 0 0 1px oklch(0 0 0 / 0.05);
+  --shadow-glow: 0 0 30px oklch(0.68 0.18 235 / 0.1);
 }
 
 .dark {
+  /* DARK THEME (Sesuai aslinya) */
   --background: oklch(0.18 0.025 250);
   --foreground: oklch(0.97 0.005 250);
+
+  --card: oklch(0.22 0.028 252);
+  --card-foreground: oklch(0.97 0.005 250);
+
+  --popover: oklch(0.22 0.028 252);
+  --popover-foreground: oklch(0.97 0.005 250);
+
+  --primary: oklch(0.68 0.18 235);
+  --primary-foreground: oklch(0.15 0.02 250);
+
+  --secondary: oklch(0.28 0.03 252);
+  --secondary-foreground: oklch(0.97 0.005 250);
+
+  --muted: oklch(0.26 0.025 252);
+  --muted-foreground: oklch(0.68 0.02 250);
+
+  --accent: oklch(0.32 0.05 232);
+  --accent-foreground: oklch(0.97 0.005 250);
+
+  --border: oklch(0.3 0.025 252);
+  --input: oklch(0.28 0.025 252);
+  
+  --sidebar: oklch(0.15 0.025 252);
+  --sidebar-foreground: oklch(0.92 0.01 250);
+  --sidebar-primary: oklch(0.68 0.18 235);
+  --sidebar-primary-foreground: oklch(0.15 0.02 250);
+  --sidebar-accent: oklch(0.24 0.03 252);
+  --sidebar-accent-foreground: oklch(0.97 0.005 250);
+  --sidebar-border: oklch(0.26 0.025 252);
+
+  --shadow-elevated: 0 10px 30px -10px oklch(0 0 0 / 0.5), 0 0 0 1px oklch(1 0 0 / 0.05);
+  --shadow-glow: 0 0 30px oklch(0.68 0.18 235 / 0.3);
 }
 
 @layer base {

@@ -12,7 +12,7 @@ import { Droplets, Wind, Activity } from "lucide-react";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Dashboard — PLTMH Banjar River Monitoring" },
+      { title: "Dashboard — Pemantauan Sungai PLTMH Banjar" },
       { name: "description", content: "Dashboard IoT real-time untuk memantau ketinggian air, kecepatan aliran, dan debit untuk pembangkit listrik mikrohidro PLTMH Banjar." },
     ],
   }),
@@ -50,14 +50,14 @@ function Dashboard() {
   const trendDis = +(((latest.discharge - prev.discharge) / prev.discharge) * 100).toFixed(1);
 
   return (
-    <AppLayout title="Live Dashboard" subtitle="PLTMH Banjar · Real-time river monitoring">
+    <AppLayout title="Dashboard Real-time" subtitle="PLTMH Banjar · Pemantauan sungai Real-time">
       <div className="space-y-5">
         <AlertBanner level={level} />
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <KpiCard label="Level Air" value={latest.level.toFixed(2)} unit="m" icon={Droplets} variant={level === "danger" ? "danger" : level === "standby" ? "warning" : "primary"} trend={trendLevel} max={8} />
+          <KpiCard label="Tinggi Air" value={latest.level.toFixed(2)} unit="m" icon={Droplets} variant={level === "danger" ? "danger" : level === "standby" ? "warning" : "primary"} trend={trendLevel} max={8} />
           <KpiCard label="Kecepatan Aliran" value={latest.velocity.toFixed(2)} unit="m/d" icon={Wind} variant="success" trend={trendVel} max={3} />
-          <KpiCard label="Debit" value={latest.discharge.toFixed(2)} unit="m³/d" icon={Activity} variant="primary" trend={trendDis} />
+          <KpiCard label="Debit Air" value={latest.discharge.toFixed(2)} unit="m³/d" icon={Activity} variant="primary" trend={trendDis} />
         </div>
 
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
