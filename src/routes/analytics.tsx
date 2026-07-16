@@ -1,10 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { AppLayout } from "@/components/AppLayout";
 import { Card } from "@/components/ui/card";
 import { MonitoringChart } from "@/components/MonitoringChart";
 import { generateHistory, generatePrediction } from "@/lib/mockData";
-import { Brain, TrendingUp, Target, Zap } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 
 export const Route = createFileRoute("/analytics")({
   head: () => ({
@@ -16,96 +15,133 @@ export const Route = createFileRoute("/analytics")({
   component: AnalyticsPage,
 });
 
+const modelStats = [
+  { value: "94.2%", label: "Accuracy" },
+  { value: "0.18m", label: "MAE" },
+  { value: "42ms", label: "Latency" },
+];
+
+const features = [
+  { name: "Curah hujan hulu (6 jam)", pct: 34 },
+  { name: "Tinggi air saat ini", pct: 27 },
+  { name: "Jam dalam sehari", pct: 16 },
+  { name: "Kekuatan tanah", pct: 13 },
+  { name: "Arah angin", pct: 10 },
+];
+
+const insights = [
+  {
+    marker: "text-primary",
+    body: (
+      <>
+        Ketinggian air puncak diprediksi <strong className="font-medium text-foreground">5.8 m</strong> dalam
+        ~4 jam — ambang Standby.
+      </>
+    ),
+  },
+  {
+    marker: "text-warning",
+    body: (
+      <>
+        Peluang melampaui ambang Bahaya (≥6m) dalam 12 jam:{" "}
+        <strong className="font-medium text-warning">22%</strong>.
+      </>
+    ),
+  },
+  {
+    marker: "text-success",
+    body: (
+      <>
+        Rekomendasi turbin:{" "}
+        <strong className="font-medium text-foreground">pertahankan kapasitas 85%</strong> untuk 6 jam
+        ke depan.
+      </>
+    ),
+  },
+  {
+    marker: "text-primary",
+    body: (
+      <>
+        Pelatihan model terakhir: <strong className="font-medium text-foreground">3 hari lalu</strong> ·
+        jadwal berikutnya 4 hari.
+      </>
+    ),
+  },
+];
+
 function AnalyticsPage() {
-  const history = generateHistory(24);
-  const predictions = generatePrediction(history[history.length - 1], 12);
+  const [history] = useState(() => generateHistory(24));
+  const [predictions] = useState(() => generatePrediction(history[history.length - 1], 12));
 
   return (
-    <AppLayout title="AI Analytics" subtitle="LSTM predictions · 6-12h forecast horizon">
-      <div className="space-y-5">
-        <Card className="border-border/60 bg-gradient-water p-5 shadow-elevated">
-          <div className="flex flex-wrap items-start justify-between gap-4">
-            <div className="flex items-start gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/20 text-primary">
-                <Brain className="h-6 w-6" />
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <h2 className="text-lg font-semibold">LSTM</h2>
-                  <Badge variant="outline" className="border-success/40 bg-success/10 text-success">Active</Badge>
-                </div>
-                <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
-                  Dilatih menggunakan data sensor dan curah hujan historis selama 18 bulan. Memprediksi ketinggian air dan kecepatan aliran dengan granularitas 30 menit untuk 12 jam berikutnya.
-                </p>
-              </div>
+    <AppLayout title="AI Analytics" subtitle="Prediksi LSTM · horizon 6-12 jam">
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-wrap justify-between gap-4 rounded-[18px] border border-primary/40 bg-primary/6 p-4">
+          <div className="flex min-w-65 flex-1 items-start gap-3.5">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[13px] border-2 border-primary font-mono font-bold text-primary">
+              AI
             </div>
-            <div className="grid grid-cols-3 gap-3 text-center">
-              <Metric icon={Target} label="Accuracy" value="94.2%" />
-              <Metric icon={TrendingUp} label="MAE" value="0.18m" />
-              <Metric icon={Zap} label="Latency" value="42ms" />
+            <div>
+              <div className="flex items-center gap-2">
+                <h2 className="text-[15px] font-semibold">Model LSTM</h2>
+                <span className="rounded border border-success/40 px-2 py-0.5 font-mono text-[9px] font-bold text-success">
+                  ACTIVE
+                </span>
+              </div>
+              <p className="mt-1.5 max-w-120 text-xs text-muted-foreground">
+                Dilatih dari data sensor &amp; curah hujan historis 18 bulan. Prediksi ketinggian air
+                &amp; kecepatan aliran, granularitas 30 menit untuk 12 jam ke depan.
+              </p>
             </div>
           </div>
-        </Card>
+          <div className="grid grid-cols-3 gap-2">
+            {modelStats.map((s) => (
+              <div key={s.label} className="self-start rounded-xl border border-border px-3.5 py-2 text-center">
+                <div className="font-mono text-[15px] font-bold">{s.value}</div>
+                <div className="text-[9px] uppercase text-muted-foreground">{s.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
 
-        <MonitoringChart data={history} predictions={predictions} title="Prakiraan cuaca: 12 jam ke depan" description="Solid = observed · Dashed = predicted" />
+        <MonitoringChart
+          data={history}
+          predictions={predictions}
+          title="Prakiraan 12 Jam Ke Depan"
+          description="solid = observed · dashed = predicted"
+        />
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <Card className="border-border/60 p-5 shadow-elevated">
-            <h4 className="text-sm font-semibold">Fitur-Fitur yang Berkontribusi Utama</h4>
-            <div className="mt-3 space-y-3">
-              {[
-                { name: "Curah hujan hulu (6 jam)", weight: 0.34 },
-                { name: "Tinggi air saat ini", weight: 0.27 },
-                { name: "Jam dalam sehari", weight: 0.16 },
-                { name: "Kekuatan tanah", weight: 0.13 },
-                { name: "Arah angin", weight: 0.1 },
-              ].map((f) => (
+        <div className="grid grid-cols-1 gap-3.5 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+          <Card className="rounded-2xl border-border bg-card p-4 shadow-elevated">
+            <h4 className="mb-2.5 text-[13px] font-semibold">Fitur Berkontribusi Utama</h4>
+            <div className="flex flex-col gap-2.5">
+              {features.map((f) => (
                 <div key={f.name}>
-                  <div className="flex justify-between text-xs">
-                    <span className="text-muted-foreground">{f.name}</span>
-                    <span className="tabular-nums font-medium">{(f.weight * 100).toFixed(0)}%</span>
+                  <div className="flex justify-between text-[11px] text-muted-foreground">
+                    <span>{f.name}</span>
+                    <span className="font-mono text-foreground">{f.pct}%</span>
                   </div>
-                  <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-muted">
-                    <div className="h-full rounded-full bg-primary" style={{ width: `${f.weight * 100}%` }} />
+                  <div className="mt-1 h-1.25 bg-muted">
+                    <div className="h-full bg-primary" style={{ width: `${f.pct}%` }} />
                   </div>
                 </div>
               ))}
             </div>
           </Card>
 
-          <Card className="border-border/60 p-5 shadow-elevated md:col-span-2">
-            <h4 className="text-sm font-semibold">Model Insights</h4>
-            <ul className="mt-3 space-y-2.5 text-sm text-muted-foreground">
-              <li className="flex gap-2">
-                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-                Ketinggian air puncak yang diprediksi <span className="font-medium text-foreground">5.8 m</span> dalam waktu sekitar <span className="font-medium text-foreground">4 jam</span> — berada dalam ambang batas Standby.
-              </li>
-              <li className="flex gap-2">
-                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-warning" />
-                Kemungkinan melampaui ambang batas Bahaya (≥6 m) dalam 12 jam ke depan: <span className="font-medium text-warning">22%</span>.
-              </li>
-              <li className="flex gap-2">
-                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-success" />
-                Rekomendasi operasi turbin: <span className="font-medium text-foreground">Pertahankan kapasitas 85%</span> untuk 6 jam ke depan.
-              </li>
-              <li className="flex gap-2">
-                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-                Pelatihan model terakhir: <span className="font-medium text-foreground">3 hari yang lalu</span> · Jadwal berikutnya: 4 hari.
-              </li>
+          <Card className="rounded-2xl border-border bg-card p-4 shadow-elevated">
+            <h4 className="mb-2.5 text-[13px] font-semibold">Model Insights</h4>
+            <ul className="flex flex-col gap-2 text-xs text-muted-foreground">
+              {insights.map((ins, i) => (
+                <li key={i} className="flex gap-2">
+                  <span className={ins.marker}>▸</span>
+                  <span>{ins.body}</span>
+                </li>
+              ))}
             </ul>
           </Card>
         </div>
       </div>
     </AppLayout>
-  );
-}
-
-function Metric({ icon: Icon, label, value }: { icon: typeof Brain; label: string; value: string }) {
-  return (
-    <div className="rounded-lg border border-border/60 bg-card/60 px-3 py-2">
-      <Icon className="mx-auto h-3.5 w-3.5 text-muted-foreground" />
-      <div className="mt-0.5 text-sm font-semibold tabular-nums">{value}</div>
-      <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{label}</div>
-    </div>
   );
 }

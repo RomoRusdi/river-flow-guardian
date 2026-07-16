@@ -5,14 +5,13 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Cloud, Radio, Database } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/settings")({
   head: () => ({
     meta: [
       { title: "Settings — PLTMH Banjar" },
-      { name: "description", content: "Configure thresholds, integrations and notification preferences." },
+      { name: "description", content: "Konfigurasi threshold, integrasi, dan preferensi notifikasi." },
     ],
   }),
   component: SettingsPage,
@@ -20,34 +19,27 @@ export const Route = createFileRoute("/settings")({
 
 function SettingsPage() {
   return (
-    <AppLayout title="Settings" subtitle="Thresholds · Integrations · Notifications">
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-        <Card className="border-border/60 p-5 shadow-elevated">
-          <h3 className="text-base font-semibold">Threshold Peringatan</h3>
-          <p className="text-xs text-muted-foreground">Tetapkan batas ketinggian air untuk sistem EWS.</p>
-          <div className="mt-4 space-y-3">
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <Label>Threshold Standby (m)</Label>
-                <Input type="number" step="0.1" defaultValue={4.5} />
-              </div>
-              <div>
-                <Label>Threshold Bahaya (m)</Label>
-                <Input type="number" step="0.1" defaultValue={6.0} />
-              </div>
-            </div>
-            <div>
-              <Label>Lebar penampang melintang sungai (m)</Label>
-              <Input type="number" step="0.1" defaultValue={4.2} />
-            </div>
-            <Button className="w-full">Simpan threshold</Button>
+    <AppLayout title="Settings" subtitle="Threshold · Integrasi · Notifikasi">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-3.5">
+        <Card className="rounded-2xl border-border bg-card p-4 shadow-elevated">
+          <h3 className="text-sm font-semibold">Threshold Peringatan</h3>
+          <p className="mb-3 text-[11px] text-muted-foreground">Batas ketinggian air untuk sistem EWS</p>
+          <div className="grid grid-cols-2 gap-2.5">
+            <NumberField label="Siaga (m)" defaultValue={4.5} />
+            <NumberField label="Bahaya (m)" defaultValue={6.0} />
           </div>
+          <div className="mt-2.5">
+            <NumberField label="Lebar Penampang Sungai (m)" defaultValue={4.2} />
+          </div>
+          <Button className="mt-3.5 w-full rounded-[10px] font-mono text-xs font-semibold">
+            SIMPAN THRESHOLD
+          </Button>
         </Card>
 
-        <Card className="border-border/60 p-5 shadow-elevated">
-          <h3 className="text-base font-semibold">Notifikasi</h3>
-          <p className="text-xs text-muted-foreground">Tempat mengirimkan peringatan ketika EWS diaktifkan.</p>
-          <div className="mt-4 space-y-4">
+        <Card className="rounded-2xl border-border bg-card p-4 shadow-elevated">
+          <h3 className="text-sm font-semibold">Notifikasi</h3>
+          <p className="mb-3 text-[11px] text-muted-foreground">Kanal pengiriman peringatan EWS</p>
+          <div className="flex flex-col gap-2">
             <Toggle label="Email alerts" desc="Kirim ke semua admin pada Standby+" defaultChecked />
             <Toggle label="WhatsApp / SMS" desc="Peringatan kritis (Bahaya) saja" defaultChecked />
             <Toggle label="Push notifications" desc="Browser & client mobile" />
@@ -55,13 +47,15 @@ function SettingsPage() {
           </div>
         </Card>
 
-        <Card className="border-border/60 p-5 shadow-elevated lg:col-span-2">
-          <h3 className="text-base font-semibold">Backend Integrations</h3>
-          <p className="text-xs text-muted-foreground">Hubungkan penyimpanan data time-series dan aliran telemetri perangkat secara langsung.</p>
-          <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-3">
-            <IntegrationCard icon={Database} title="Supabase" desc="PostgreSQL time-series" status="Ready" />
-            <IntegrationCard icon={Radio} title="MQTT Broker" desc="WebSocket bridge" status="Ready" />
-            <IntegrationCard icon={Cloud} title="Cloud Storage" desc="Long-term archival" status="Disabled" />
+        <Card className="col-span-full rounded-2xl border-border bg-card p-4 shadow-elevated">
+          <h3 className="text-sm font-semibold">Integrasi Backend</h3>
+          <p className="mb-3 text-[11px] text-muted-foreground">
+            Hubungkan penyimpanan time-series &amp; telemetri perangkat
+          </p>
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-2.5">
+            <IntegrationCard code="DB" title="Supabase" desc="PostgreSQL time-series" ready />
+            <IntegrationCard code="RF" title="MQTT Broker" desc="WebSocket bridge" ready />
+            <IntegrationCard code="CL" title="Cloud Storage" desc="Long-term archival" />
           </div>
         </Card>
       </div>
@@ -69,31 +63,55 @@ function SettingsPage() {
   );
 }
 
+function NumberField({ label, defaultValue }: { label: string; defaultValue: number }) {
+  return (
+    <div>
+      <Label className="text-[10px] uppercase tracking-wider text-muted-foreground">{label}</Label>
+      <Input
+        type="number"
+        step="0.1"
+        defaultValue={defaultValue}
+        className="mt-1 rounded-lg border-input bg-inset font-mono text-xs"
+      />
+    </div>
+  );
+}
+
 function Toggle({ label, desc, defaultChecked }: { label: string; desc: string; defaultChecked?: boolean }) {
   return (
-    <div className="flex items-center justify-between gap-3 rounded-lg border border-border/60 bg-muted/30 p-3">
+    <div className="flex items-center justify-between gap-3 rounded-[10px] border border-inset-border bg-inset p-2.5">
       <div>
-        <p className="text-sm font-medium">{label}</p>
-        <p className="text-xs text-muted-foreground">{desc}</p>
+        <p className="text-xs font-medium">{label}</p>
+        <p className="text-[10px] text-muted-foreground">{desc}</p>
       </div>
       <Switch defaultChecked={defaultChecked} />
     </div>
   );
 }
 
-function IntegrationCard({ icon: Icon, title, desc, status }: { icon: typeof Cloud; title: string; desc: string; status: string }) {
-  const ready = status === "Ready";
+function IntegrationCard({ code, title, desc, ready }: { code: string; title: string; desc: string; ready?: boolean }) {
   return (
-    <div className="rounded-lg border border-border/60 bg-muted/30 p-4">
-      <div className="flex items-start justify-between">
-        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/15 text-primary">
-          <Icon className="h-4 w-4" />
-        </div>
-        <Badge variant="outline" className={ready ? "border-success/40 bg-success/10 text-success" : "border-muted-foreground/30 bg-muted/40 text-muted-foreground"}>{status}</Badge>
+    <div className="rounded-[10px] border border-inset-border bg-inset p-3.5">
+      <div className="flex items-center justify-between">
+        <span className="font-mono text-[11px]">{code}</span>
+        <span
+          className={cn(
+            "border px-1.5 py-0.5 font-mono text-[9px]",
+            ready ? "border-success/40 text-success" : "border-muted-foreground/40 text-muted-foreground/80",
+          )}
+        >
+          {ready ? "READY" : "DISABLED"}
+        </span>
       </div>
-      <h4 className="mt-3 text-sm font-semibold">{title}</h4>
-      <p className="text-xs text-muted-foreground">{desc}</p>
-      <Button variant="outline" size="sm" className="mt-3 w-full">Configure</Button>
+      <div className="mt-2 text-[13px] font-semibold">{title}</div>
+      <div className="text-[11px] text-muted-foreground">{desc}</div>
+      <Button
+        variant="outline"
+        size="sm"
+        className="mt-2.5 w-full rounded-lg border-input bg-transparent text-[11px]"
+      >
+        Configure
+      </Button>
     </div>
   );
 }

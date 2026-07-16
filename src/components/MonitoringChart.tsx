@@ -2,11 +2,9 @@ import { Card } from "@/components/ui/card";
 import { Reading } from "@/lib/mockData";
 import {
   Area,
-  AreaChart,
+  ComposedChart,
   CartesianGrid,
-  Legend,
   Line,
-  LineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -19,65 +17,151 @@ interface Props {
   predictions?: Reading[];
   title?: string;
   description?: string;
+  standbyThreshold?: number;
+  dangerThreshold?: number;
 }
 
-export function MonitoringChart({ data, predictions, title = "Real-time Monitoring", description }: Props) {
-  const merged = predictions
+const COLORS = {
+  level: "oklch(0.75 0.15 200)",
+  velocity: "oklch(0.72 0.16 155)",
+  predicted: "oklch(0.78 0.15 80)",
+  danger: "oklch(0.62 0.22 25)",
+  grid: "oklch(0.22 0.02 250 / 0.6)",
+  tick: "oklch(0.5 0.02 250)",
+};
+
+function Swatch({ color, label }: { color: string; label: string }) {
+  return (
+    <span className="flex items-center gap-1">
+      <span className="inline-block h-2 w-2" style={{ background: color }} />
+      {label}
+    </span>
+  );
+}
+
+export function MonitoringChart({
+  data,
+  predictions,
+  title = "Grafik Pemantauan Real-time",
+  description,
+  standbyThreshold = 4.5,
+  dangerThreshold = 6,
+}: Props) {
+  type ChartPoint = Omit<Reading, "level" | "velocity"> & {
+    level: number | null;
+    velocity: number | null;
+    predLevel?: number | null;
+  };
+
+  const merged: ChartPoint[] = predictions
     ? [
-        ...data.map((d) => ({ ...d, predLevel: null as number | null, predVelocity: null as number | null })),
-        ...predictions.map((d) => ({ ...d, predLevel: d.level, predVelocity: d.velocity, level: null as any, velocity: null as any })),
+        ...data.map((d, i) => ({
+          ...d,
+          // sambungkan garis solid & dashed di titik observasi terakhir
+          predLevel: i === data.length - 1 ? d.level : null,
+        })),
+        ...predictions.map((d) => ({
+          ...d,
+          predLevel: d.level,
+          level: null as number | null,
+          velocity: null as number | null,
+        })),
       ]
     : data;
 
   return (
-    <Card className="border-border/60 p-5 shadow-elevated">
-      <div className="mb-4 flex flex-wrap items-end justify-between gap-2">
+    <Card className="min-w-0 rounded-2xl border-border bg-card p-4 shadow-elevated">
+      <div className="mb-2 flex flex-wrap items-end justify-between gap-2">
         <div>
-          <h3 className="text-base font-semibold">{title}</h3>
-          {description && <p className="text-xs text-muted-foreground">{description}</p>}
+          <h3 className="text-sm font-semibold">{title}</h3>
+          {description && <p className="text-[11px] text-muted-foreground">{description}</p>}
         </div>
-        <div className="flex items-center gap-3 text-xs text-muted-foreground">
-          <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-primary" /> Tinggi Air (m)</span>
-          <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-success" /> Kecepatan (m/s)</span>
-          {predictions && <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-warning" /> Prediksi</span>}
+        <div className="flex gap-3 font-mono text-[10px] text-muted-foreground">
+          <Swatch color={COLORS.level} label="Tinggi Air (m)" />
+          {!predictions && <Swatch color={COLORS.velocity} label="Kecepatan (m/d)" />}
+          {predictions && <Swatch color={COLORS.predicted} label="Prediksi" />}
         </div>
       </div>
-      <div className="h-[320px] w-full">
+      <div className="h-65 w-full">
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={merged} margin={{ top: 5, right: 10, left: -10, bottom: 0 }}>
-            <defs>
-              <linearGradient id="lvl" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="oklch(0.68 0.18 235)" stopOpacity={0.4} />
-                <stop offset="95%" stopColor="oklch(0.68 0.18 235)" stopOpacity={0} />
-              </linearGradient>
-              <linearGradient id="vel" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="oklch(0.7 0.17 152)" stopOpacity={0.3} />
-                <stop offset="95%" stopColor="oklch(0.7 0.17 152)" stopOpacity={0} />
-              </linearGradient>
-            </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="oklch(0.3 0.025 252)" vertical={false} />
-            <XAxis dataKey="time" stroke="oklch(0.68 0.02 250)" fontSize={11} tickLine={false} axisLine={false} />
-            <YAxis stroke="oklch(0.68 0.02 250)" fontSize={11} tickLine={false} axisLine={false} />
+          <ComposedChart data={merged} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid} vertical={false} />
+            <XAxis
+              dataKey="time"
+              stroke={COLORS.tick}
+              fontSize={9}
+              fontFamily="IBM Plex Mono, monospace"
+              tickLine={false}
+              axisLine={false}
+              interval="preserveStartEnd"
+              minTickGap={40}
+            />
+            <YAxis
+              domain={[0, 8]}
+              stroke={COLORS.tick}
+              fontSize={9}
+              fontFamily="IBM Plex Mono, monospace"
+              tickLine={false}
+              axisLine={false}
+            />
+            <YAxis yAxisId="vel" domain={[0, 3]} hide />
             <Tooltip
               contentStyle={{
-                backgroundColor: "oklch(0.22 0.028 252)",
-                border: "1px solid oklch(0.3 0.025 252)",
-                borderRadius: 8,
-                fontSize: 12,
+                backgroundColor: "oklch(0.16 0.02 250)",
+                border: "1px solid oklch(0.32 0.03 240 / 0.7)",
+                borderRadius: 10,
+                fontSize: 11,
+                fontFamily: "IBM Plex Mono, monospace",
               }}
-              labelStyle={{ color: "oklch(0.97 0.005 250)" }}
+              labelStyle={{ color: "oklch(0.95 0.01 250)" }}
             />
-            <ReferenceLine y={6} stroke="oklch(0.62 0.22 25)" strokeDasharray="4 4" label={{ value: "Danger", fill: "oklch(0.62 0.22 25)", fontSize: 10, position: "right" }} />
-            <ReferenceLine y={4.5} stroke="oklch(0.78 0.16 85)" strokeDasharray="4 4" label={{ value: "Standby", fill: "oklch(0.78 0.16 85)", fontSize: 10, position: "right" }} />
-            <Area type="monotone" dataKey="level" name="Level (m)" stroke="oklch(0.68 0.18 235)" strokeWidth={2} fill="url(#lvl)" />
-            <Area type="monotone" dataKey="velocity" name="Velocity (m/s)" stroke="oklch(0.7 0.17 152)" strokeWidth={2} fill="url(#vel)" />
-            {predictions && (
-              <>
-                <Line type="monotone" dataKey="predLevel" name="Pred. Level" stroke="oklch(0.78 0.16 85)" strokeWidth={2} strokeDasharray="5 5" dot={false} />
-                <Line type="monotone" dataKey="predVelocity" name="Pred. Velocity" stroke="oklch(0.65 0.2 300)" strokeWidth={2} strokeDasharray="5 5" dot={false} />
-              </>
+            <ReferenceLine
+              y={dangerThreshold}
+              stroke={COLORS.danger}
+              strokeDasharray="4 4"
+              label={{ value: "Bahaya", fill: COLORS.danger, fontSize: 9, position: "insideTopRight" }}
+            />
+            <ReferenceLine
+              y={standbyThreshold}
+              stroke={COLORS.predicted}
+              strokeDasharray="4 4"
+              label={{ value: "Siaga", fill: COLORS.predicted, fontSize: 9, position: "insideTopRight" }}
+            />
+            <Area
+              type="monotone"
+              dataKey="level"
+              name="Tinggi Air (m)"
+              stroke={COLORS.level}
+              strokeWidth={2}
+              fill="oklch(0.75 0.15 200 / 0.12)"
+              dot={false}
+              isAnimationActive={false}
+            />
+            {!predictions && (
+              <Line
+                yAxisId="vel"
+                type="monotone"
+                dataKey="velocity"
+                name="Kecepatan (m/d)"
+                stroke={COLORS.velocity}
+                strokeWidth={2}
+                dot={false}
+                isAnimationActive={false}
+              />
             )}
-          </AreaChart>
+            {predictions && (
+              <Line
+                type="monotone"
+                dataKey="predLevel"
+                name="Prediksi (m)"
+                stroke={COLORS.predicted}
+                strokeWidth={2}
+                strokeDasharray="5 5"
+                dot={false}
+                isAnimationActive={false}
+              />
+            )}
+          </ComposedChart>
         </ResponsiveContainer>
       </div>
     </Card>

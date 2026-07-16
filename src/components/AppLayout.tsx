@@ -1,8 +1,6 @@
 import { ReactNode, useEffect, useState } from "react";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "./AppSidebar";
-import { Bell, Wifi, Sun, Moon } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -10,59 +8,61 @@ interface AppLayoutProps {
   subtitle?: string;
 }
 
-export function AppLayout({ children, title, subtitle }: AppLayoutProps) {
-  // Membaca status tema terakhir dari localStorage. Jika belum ada, default ke true (dark mode)
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    const savedTheme = localStorage.getItem("theme");
-    return savedTheme ? savedTheme === "dark" : true;
-  });
-
-  // Efek untuk menerapkan class dan menyimpan perubahan ke localStorage
+function useClock() {
+  // Kosong saat render pertama agar tidak terjadi hydration mismatch di SSR
+  const [clock, setClock] = useState("");
   useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
-  }, [isDarkMode]);
+    const format = () => {
+      const d = new Date();
+      return (
+        d.toLocaleDateString("id-ID", { day: "2-digit", month: "short" }) +
+        " · " +
+        d.toTimeString().slice(0, 8)
+      );
+    };
+    setClock(format());
+    const id = setInterval(() => setClock(format()), 1000);
+    return () => clearInterval(id);
+  }, []);
+  return clock;
+}
 
-  const toggleTheme = () => setIsDarkMode(!isDarkMode);
+export function AppLayout({ children, title, subtitle }: AppLayoutProps) {
+  const clock = useClock();
 
   return (
-    <SidebarProvider>
-      <div className="flex min-h-screen w-full bg-background">
+    <SidebarProvider style={{ "--sidebar-width": "220px" } as React.CSSProperties}>
+      <div className="flex min-h-screen w-full bg-background bg-grid">
         <AppSidebar />
-        <div className="flex flex-1 flex-col">
-          <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-border bg-background/80 px-4 backdrop-blur-md md:px-6">
-            <SidebarTrigger className="-ml-1" />
-            <div className="flex flex-1 flex-col">
-              <h1 className="text-base font-semibold leading-tight md:text-lg">{title}</h1>
-              {subtitle && <p className="text-xs text-muted-foreground leading-tight">{subtitle}</p>}
+        <div className="flex min-w-0 flex-1 flex-col">
+          <header className="sticky top-0 z-30 flex h-15 shrink-0 items-center gap-4 border-b border-sidebar-border bg-sidebar/85 px-5 backdrop-blur-md">
+            <SidebarTrigger className="-ml-1 md:hidden" />
+            <div className="min-w-0 flex-1">
+              <h1 className="truncate text-[15px] font-semibold leading-tight">{title}</h1>
+              {subtitle && (
+                <p className="truncate text-[11px] leading-tight text-muted-foreground">
+                  {subtitle}
+                </p>
+              )}
             </div>
-            <div className="flex items-center gap-2">
-              <Badge variant="outline" className="hidden gap-1.5 border-success/40 bg-success/10 text-success sm:inline-flex">
-                <Wifi className="h-3 w-3" />
-                ESP32 Aktif
-              </Badge>
-              
-              {/* Tombol Tema Terang / Gelap */}
-              <button 
-                onClick={toggleTheme}
-                className="relative flex h-9 w-9 items-center justify-center rounded-md border border-border bg-card text-muted-foreground transition-colors hover:text-foreground"
-                aria-label="Ubah Tema"
+            <div className="flex items-center gap-2.5">
+              <div className="hidden items-center rounded-full border border-input px-3 py-1.25 font-mono text-[11px] text-muted-foreground sm:flex">
+                <span>{clock || "—"}</span>
+              </div>
+              <div className="hidden items-center gap-1.5 rounded-full border border-success/40 bg-success/10 px-3 py-1.25 font-mono text-[11px] text-success sm:flex">
+                <span className="h-1.5 w-1.5 rounded-full bg-success animate-blink" />
+                ESP32 ONLINE
+              </div>
+              <button
+                className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border border-input font-mono text-muted-foreground transition-colors hover:text-foreground"
+                aria-label="Notifikasi"
               >
-                {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-              </button>
-
-              <button className="relative flex h-9 w-9 items-center justify-center rounded-md border border-border bg-card text-muted-foreground transition-colors hover:text-foreground">
-                <Bell className="h-4 w-4" />
-                <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-warning" />
+                !
+                <span className="absolute right-1.25 top-1.25 h-1.5 w-1.5 rounded-full bg-warning" />
               </button>
             </div>
           </header>
-          <main className="flex-1 p-4 md:p-6">{children}</main>
+          <main className="min-w-0 flex-1 p-5">{children}</main>
         </div>
       </div>
     </SidebarProvider>

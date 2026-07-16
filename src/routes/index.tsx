@@ -4,10 +4,10 @@ import { AppLayout } from "@/components/AppLayout";
 import { KpiCard } from "@/components/KpiCard";
 import { AlertBanner } from "@/components/AlertBanner";
 import { MonitoringChart } from "@/components/MonitoringChart";
+import { WaterGauge } from "@/components/WaterGauge";
 import { AnomalyPanel } from "@/components/AnomalyPanel";
 import { DeviceStatusCard } from "@/components/DeviceStatusCard";
 import { generateHistory, getAlertLevel, mockAnomalies, computeDischarge } from "@/lib/mockData";
-import { Droplets, Wind, Activity } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -50,24 +50,31 @@ function Dashboard() {
   const trendDis = +(((latest.discharge - prev.discharge) / prev.discharge) * 100).toFixed(1);
 
   return (
-    <AppLayout title="Dashboard Real-time" subtitle="PLTMH Banjar · Pemantauan sungai Real-time">
-      <div className="space-y-5">
+    <AppLayout title="Dashboard Real-time" subtitle="PLTMH Banjar · Pemantauan sungai real-time">
+      <div className="flex flex-col gap-4">
         <AlertBanner level={level} />
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <KpiCard label="Tinggi Air" value={latest.level.toFixed(2)} unit="m" icon={Droplets} variant={level === "danger" ? "danger" : level === "standby" ? "warning" : "primary"} trend={trendLevel} max={8} />
-          <KpiCard label="Kecepatan Aliran" value={latest.velocity.toFixed(2)} unit="m/d" icon={Wind} variant="success" trend={trendVel} max={3} />
-          <KpiCard label="Debit Air" value={latest.discharge.toFixed(2)} unit="m³/d" icon={Activity} variant="primary" trend={trendDis} />
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-3.5">
+          <KpiCard
+            label="Tinggi Air"
+            value={latest.level.toFixed(2)}
+            unit="m"
+            variant={level === "danger" ? "danger" : level === "standby" ? "warning" : "primary"}
+            trend={trendLevel}
+            max={8}
+          />
+          <KpiCard label="Kecepatan Aliran" value={latest.velocity.toFixed(2)} unit="m/d" variant="success" trend={trendVel} max={3} />
+          <KpiCard label="Debit Air" value={latest.discharge.toFixed(2)} unit="m³/d" variant="primary" trend={trendDis} max={20} />
         </div>
 
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <div className="lg:col-span-2">
-            <MonitoringChart data={data} description="12 jam terakhir · resolusi 15 menit · Auto-refresh 4 detik" />
-          </div>
-          <div className="space-y-4">
-            <DeviceStatusCard />
-            <AnomalyPanel anomalies={mockAnomalies} />
-          </div>
+        <div className="grid grid-cols-1 gap-3.5 lg:grid-cols-[minmax(0,2fr)_minmax(240px,1fr)]">
+          <MonitoringChart data={data} description="12 jam terakhir · auto-refresh 4 detik" />
+          <WaterGauge level={latest.level} status={level} />
+        </div>
+
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-3.5">
+          <DeviceStatusCard />
+          <AnomalyPanel anomalies={mockAnomalies} />
         </div>
       </div>
     </AppLayout>

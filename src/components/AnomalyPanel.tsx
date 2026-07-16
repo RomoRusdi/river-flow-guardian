@@ -1,40 +1,30 @@
 import { Card } from "@/components/ui/card";
 import { Anomaly } from "@/lib/mockData";
-import { AlertTriangle, CheckCircle2, Siren, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const sevConfig = {
-  safe: { icon: CheckCircle2, color: "text-success", bg: "bg-success/10 border-success/20" },
-  standby: { icon: AlertTriangle, color: "text-warning", bg: "bg-warning/10 border-warning/20" },
-  danger: { icon: Siren, color: "text-danger", bg: "bg-danger/10 border-danger/20" },
+const sevBorder = {
+  safe: "border-l-success",
+  standby: "border-l-warning",
+  danger: "border-l-danger",
 };
 
 export function AnomalyPanel({ anomalies }: { anomalies: Anomaly[] }) {
   return (
-    <Card className="border-border/60 p-5 shadow-elevated">
-      <div className="mb-4 flex items-center gap-2">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/15 text-primary">
-          <Sparkles className="h-4 w-4" />
-        </div>
-        <div>
-          <h3 className="text-base font-semibold">AI Anomaly Detection</h3>
-          <p className="text-xs text-muted-foreground">Peristiwa terbaru yang ditandai oleh model ML</p>
-        </div>
-      </div>
-      <div className="space-y-2">
-        {anomalies.map((a) => {
-          const c = sevConfig[a.severity];
-          const Icon = c.icon;
-          return (
-            <div key={a.id} className={cn("flex items-start gap-3 rounded-lg border p-3", c.bg)}>
-              <Icon className={cn("mt-0.5 h-4 w-4 shrink-0", c.color)} />
-              <div className="flex-1 min-w-0">
-                <p className="text-sm leading-snug">{a.message}</p>
-                <p className="mt-0.5 text-xs text-muted-foreground">{a.time}</p>
-              </div>
-            </div>
-          );
-        })}
+    <Card className="rounded-2xl border-border bg-card p-4 shadow-elevated">
+      <h3 className="text-[13px] font-semibold">AI Anomaly Detection</h3>
+      <p className="mb-2.5 text-[11px] text-muted-foreground">
+        Peristiwa terbaru ditandai oleh model ML
+      </p>
+      <div className="flex flex-col gap-1.5">
+        {anomalies.map((a) => (
+          <div
+            key={a.id}
+            className={cn("border-l-2 bg-inset p-2 pl-2.5", sevBorder[a.severity])}
+          >
+            <p className="text-xs leading-snug">{a.message}</p>
+            <p className="mt-0.5 font-mono text-[10px] text-muted-foreground/90">{a.time}</p>
+          </div>
+        ))}
       </div>
     </Card>
   );

@@ -1,51 +1,63 @@
 import { AlertLevel } from "@/lib/mockData";
-import { ShieldCheck, AlertTriangle, Siren } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const config = {
   safe: {
-    icon: ShieldCheck,
-    title: "Status: AMAN (Safe)",
-    desc: "Tingkat dan aliran air berada dalam kisaran operasi normal. Semua sistem dalam kondisi normal.",
-    bg: "bg-gradient-success border-success/30",
-    iconBg: "bg-success/20 text-success animate-pulse-ring",
+    title: "STATUS: AMAN",
+    desc: "Tinggi & aliran air dalam kisaran normal. Semua sistem beroperasi normal.",
     label: "SAFE",
-    labelBg: "bg-success text-success-foreground",
+    box: "border-success/50 bg-success/6",
+    accent: "border-success text-success",
+    pill: "bg-success text-success-foreground",
   },
   standby: {
-    icon: AlertTriangle,
-    title: "Status: SIAGA (Standby)",
-    desc: "Tingkat air yang meningkat terdeteksi. Pantau secara ketat dan siapkan prosedur darurat.",
-    bg: "bg-gradient-warning border-warning/40",
-    iconBg: "bg-warning/20 text-warning animate-pulse-ring-warn",
+    title: "STATUS: SIAGA",
+    desc: "Peningkatan ketinggian air terdeteksi. Pantau ketat & siapkan prosedur darurat.",
     label: "STANDBY",
-    labelBg: "bg-warning text-warning-foreground",
+    box: "border-warning/50 bg-warning/6",
+    accent: "border-warning text-warning",
+    pill: "bg-warning text-warning-foreground",
   },
   danger: {
-    icon: Siren,
-    title: "Status: AWAS (Danger)",
+    title: "STATUS: BAHAYA",
     desc: "Batas kritis terlampaui! Mulai protokol darurat segera.",
-    bg: "bg-gradient-danger border-danger/50",
-    iconBg: "bg-danger/20 text-danger animate-pulse-ring-danger",
     label: "DANGER",
-    labelBg: "bg-danger text-danger-foreground",
+    box: "border-danger/50 bg-danger/6",
+    accent: "border-danger text-danger",
+    pill: "bg-danger text-danger-foreground",
   },
 };
 
 export function AlertBanner({ level }: { level: AlertLevel }) {
   const c = config[level];
-  const Icon = c.icon;
   return (
-    <div className={cn("flex items-center gap-4 rounded-xl border p-4 shadow-elevated md:p-5", c.bg)}>
-      <div className={cn("flex h-12 w-12 shrink-0 items-center justify-center rounded-full", c.iconBg)}>
-        <Icon className="h-6 w-6" />
+    <div
+      className={cn(
+        "flex items-center gap-3.5 rounded-[18px] border p-4 shadow-elevated",
+        c.box,
+      )}
+    >
+      <div
+        className={cn(
+          "flex h-12 w-12 shrink-0 items-center justify-center rounded-[14px] border-2 font-mono text-base font-bold animate-blink",
+          c.accent,
+        )}
+      >
+        !
       </div>
-      <div className="flex-1 min-w-0">
-        <div className="flex flex-wrap items-center gap-2">
-          <h3 className="text-base font-semibold">{c.title}</h3>
-          <span className={cn("rounded-full px-2 py-0.5 text-[10px] font-bold tracking-wider", c.labelBg)}>{c.label}</span>
+      <div className="min-w-0 flex-1">
+        <div className="flex flex-wrap items-center gap-2.5">
+          <h3 className="text-[15px] font-semibold">{c.title}</h3>
+          <span
+            className={cn(
+              "rounded-full px-2.5 py-0.75 font-mono text-[10px] font-bold tracking-widest",
+              c.pill,
+            )}
+          >
+            {c.label}
+          </span>
         </div>
-        <p className="mt-0.5 text-sm text-muted-foreground">{c.desc}</p>
+        <p className="mt-1 text-[13px] text-muted-foreground">{c.desc}</p>
       </div>
     </div>
   );
